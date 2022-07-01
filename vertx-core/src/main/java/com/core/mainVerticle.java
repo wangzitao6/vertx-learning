@@ -1,8 +1,6 @@
 package com.core;
 
-import io.vertx.core.AbstractVerticle;
-import io.vertx.core.Vertx;
-import io.vertx.core.VertxOptions;
+import io.vertx.core.*;
 
 /**
  * TODO
@@ -12,18 +10,27 @@ import io.vertx.core.VertxOptions;
  * @Version 1.0.0
  */
 public class mainVerticle  extends AbstractVerticle {
-    @Override
-    public void start() throws Exception {
-        super.start();
+    public static void main(String[] args) {
+        Vertx.vertx().deployVerticle("com.core.mainVerticle");
     }
 
-    private void demo(){
-        //    Vertx vertx = Vertx.vertx();
-        Vertx vertx = Vertx.vertx(new VertxOptions().setWorkerPoolSize(20));
-        vertx.setPeriodic(1000, id -> {
-            // This handler will get called every second
-            System.out.println("timer fired!");
-        });
+    @Override
+    public void start(Promise<Void> startPromise) throws Exception {
+      this.demo1().compose(ig-> this.demo2()).compose(ig-> this.demo3());
     }
+
+    private Future<String> demo1(){
+        System.out.println("this is one");
+        return Future.succeededFuture("111");
+    }
+    private  Future<String> demo2(){
+        System.out.println("this is two");
+        return Future.succeededFuture("222");
+    }
+    private  Future<String> demo3(){
+        System.out.println("this is three");
+        return Future.succeededFuture("333");
+    }
+
 
 }
